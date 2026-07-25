@@ -55,7 +55,16 @@ export class StudentDashboardComponent {
   }
 
   handleEnroll(course: Course) {
-    this.selectedCourse.set(course);
+     this.selectedCourse.set(course);
+    //to make incremental enrollment 
+    this.availableCourses.update((courses) =>
+    courses.map((c) => {
+      if (c.id === course.id && c.enrollmentCount < c.maxCapacity) {
+        return { ...c, enrollmentCount: c.enrollmentCount + 1 };
+      }
+      return c;
+    })
+  );
     console.log("Enrollment requested for:", course.title);
   }
 }
