@@ -1,70 +1,39 @@
-import { Component, signal, computed } from "@angular/core";
-import { CourseCardComponent } from "../../ui/course-card/course-card"; // <-- Fixed import path!
-import { Course } from "../../models/course.model";
+import { Component, inject, signal, computed } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { rxResource } from '@angular/core/rxjs-interop';
+import { CourseService, Course } from '../../services/course.service';
+import { CourseCardComponent } from '../../ui/course-card/course-card';
 
 @Component({
-  selector: "app-student-dashboard",
+  selector: 'app-student-dashboard',
   standalone: true,
-  imports: [CourseCardComponent],
-  templateUrl: "./student-dashboard.component.html",
-  styleUrl: "./student-dashboard.component.scss",
+  imports: [CourseCardComponent, RouterLink],
+  templateUrl: './student-dashboard.component.html'
 })
 export class StudentDashboardComponent {
-  studentName = signal("Liya Kebede");
+  private courseService = inject(CourseService);
+
+  // Student signals
+  studentName = signal('Liya Kebede');
   earnedCredits = signal(45);
-
-  graduationStatus = computed(() =>
-    this.earnedCredits() >= 120 ? "Eligible for Graduation" : "In Progress"
-  );
-
   selectedCourse = signal<Course | null>(null);
 
-  availableCourses = signal<Course[]>([
-    {
-      id: 1,
-      title: "Advanced Java Services",
-      code: "CSE-101",
-      maxCapacity: 30,
-      enrollmentCount: 10,
-    },
-    {
-      id: 2,
-      title: "Angular UI Lab",
-      code: "CSE-210",
-      maxCapacity: 25,
-      enrollmentCount: 25,
-    },
-    {
-      id: 3,
-      title: "Database Design",
-      code: "CSE-305",
-      maxCapacity: 20,
-      enrollmentCount: 18,
-    },
-    {
-      id: 4,
-      title: "API Security Workshop",
-      code: "CSE-420",
-      maxCapacity: 40,
-      enrollmentCount: 15,
-    },
-  ]);
+  graduationStatus = computed(() =>
+    this.earnedCredits() >= 120 ? 'Eligible for Graduation' : 'In Progress'
+  );
 
+  // rxResource stream call to backend
+  coursesResource = rxResource({
+    stream: () => this.courseService.getAll()
+  });
+
+  // Method called by: (click)="registerForClass()"
   registerForClass() {
-    this.earnedCredits.update((c) => c + 3);
+    this.earnedCredits.update((credits) => credits + 3);
   }
 
+  // Method called by: (enrollClicked)="handleEnroll($event)"
   handleEnroll(course: Course) {
-     this.selectedCourse.set(course);
-    //to make incremental enrollment 
-    this.availableCourses.update((courses) =>
-    courses.map((c) => {
-      if (c.id === course.id && c.enrollmentCount < c.maxCapacity) {
-        return { ...c, enrollmentCount: c.enrollmentCount + 1 };
-      }
-      return c;
-    })
-  );
-    console.log("Enrollment requested for:", course.title);
+    this.selectedCourse.set(course);
   }
 }
