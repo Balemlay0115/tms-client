@@ -1,0 +1,231 @@
+.enrollment-wrapper {
+  max-width: 580px;
+  margin: 3rem auto;
+  padding: 2.5rem;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e2e8f0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  .form-header {
+    margin-bottom: 2rem;
+
+    .back-link {
+      display: inline-block;
+      color: #64748b;
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-decoration: none;
+      margin-bottom: 1rem;
+      transition: color 0.15s ease;
+
+      &:hover {
+        color: #4f46e5;
+      }
+    }
+
+    h2 {
+      margin: 0 0 0.35rem 0;
+      color: #0f172a;
+      font-size: 1.75rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: #64748b;
+      font-size: 0.95rem;
+    }
+  }
+
+  .form-group {
+    margin-bottom: 1.35rem;
+    display: flex;
+    flex-direction: column;
+
+    label {
+      font-weight: 600;
+      margin-bottom: 0.45rem;
+      color: #334155;
+      font-size: 0.875rem;
+    }
+
+    .form-control {
+      padding: 0.75rem 1rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      color: #0f172a;
+      background-color: #ffffff;
+      transition: all 0.2s ease;
+
+      &:focus {
+        outline: none;
+        border-color: #4f46e5;
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+      }
+
+      &.is-invalid {
+        border-color: #ef4444;
+        background-color: #fef2f2;
+      }
+    }
+
+    .error-msg {
+      color: #dc2626;
+      font-size: 0.8rem;
+      margin-top: 0.4rem;
+      font-weight: 500;
+    }
+  }
+
+  .backup-card {
+    margin: 1.75rem 0;
+    padding: 1.25rem;
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+
+    h3 {
+      margin: 0 0 1rem 0;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .backup-row {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+
+      .form-control {
+        flex: 1;
+        padding: 0.65rem 0.85rem;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        font-size: 0.9rem;
+
+        &:focus {
+          outline: none;
+          border-color: #4f46e5;
+          box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+        }
+      }
+
+      .btn-remove {
+        background-color: #fee2e2;
+        color: #991b1b;
+        border: none;
+        border-radius: 8px;
+        padding: 0 1rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+
+        &:hover {
+          background-color: #fecaca;
+        }
+      }
+    }
+
+    .btn-add-backup {
+      background-color: #ffffff;
+      color: #4f46e5;
+      border: 1px dashed #c7d2fe;
+      border-radius: 8px;
+      padding: 0.65rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background-color: #e0e7ff;
+        border-color: #4f46e5;
+      }
+    }
+  }
+
+  .form-actions {
+    margin-top: 1.75rem;
+  }
+
+  .btn-submit {
+    width: 100%;
+    padding: 0.85rem;
+    background-color: #4f46e5;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+    transition: all 0.2s ease;
+
+    &:hover:not(:disabled) {
+      background-color: #4338ca;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(79, 70, 229, 0.35);
+    }
+
+    &:disabled {
+      background-color: #cbd5e1;
+      color: #94a3b8;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+  }
+
+  .success-card {
+    text-align: center;
+    padding: 2.5rem 1rem;
+
+    .icon-circle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 56px;
+      height: 56px;
+      background-color: #dcfce7;
+      color: #15803d;
+      font-size: 1.75rem;
+      font-weight: 700;
+      border-radius: 50%;
+      margin-bottom: 1.25rem;
+    }
+
+    h3 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    p {
+      color: #64748b;
+      margin: 0 0 1.75rem 0;
+      font-size: 0.95rem;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      background-color: #4f46e5;
+      color: #ffffff;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: #4338ca;
+      }
+    }
+  }
+}

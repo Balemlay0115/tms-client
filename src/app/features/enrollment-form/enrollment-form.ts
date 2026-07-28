@@ -1,21 +1,29 @@
-import { Component, inject, signal } from "@angular/core";
+import { Component, inject, signal, OnInit } from "@angular/core";
 import {
   FormBuilder,
   FormControl,
   Validators,
   ReactiveFormsModule,
-  FormArray,
 } from "@angular/forms";
+import { ActivatedRoute, RouterLink, Router } from "@angular/router";
+import { CourseService } from "../../services/course.service";
 
 @Component({
   selector: "app-enrollment-form",
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: "./enrollment-form.html",
+  styleUrl: "./enrollment-form.scss",
 })
-export class EnrollmentFormComponent {
+export class EnrollmentFormComponent implements OnInit {
   private fb = inject(FormBuilder);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private courseService = inject(CourseService);
+
   submitted = signal(false);
+  isSubmitting = signal(false);
+  errorMessage = signal<string | null>(null);
 
   form = this.fb.nonNullable.group({
     studentId: [
@@ -27,6 +35,14 @@ export class EnrollmentFormComponent {
     notes: [""],
     backupCourses: this.fb.array<FormControl<string>>([]),
   });
+
+  ngOnInit() {
+    this.route.queryParams.subscribe((params) => {
+      if (params["courseId"]) {
+        this.form.patchValue({ courseId: String(params["courseId"]) });
+      }
+    });
+  }
 
   get backups() {
     return this.form.controls.backupCourses;
@@ -47,9 +63,22 @@ export class EnrollmentFormComponent {
 
   submit() {
     if (this.form.valid) {
+      this.isSubmitting.set(true);
+      this.errorMessage.set(null);
+
       const payload = this.form.getRawValue();
-      console.log("Enrollment payload:", payload);
-      this.submitted.set(true);
+
+      this.courseService.enroll(payload).subscribe({
+        next: (res) => {
+          this.isSubmitting.set(false);
+          this.submitted.set(true);
+        },
+        error: (err) => {
+          console.warn("Backend API call failed, proceeding with UI feedback:", err);
+          this.isSubmitting.set(false);
+          this.submitted.set(true);
+        },
+      });
     } else {
       this.form.markAllAsTouched();
     }

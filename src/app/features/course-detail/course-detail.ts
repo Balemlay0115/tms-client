@@ -1,5 +1,7 @@
-import { Component, input, effect } from "@angular/core";
+import { Component, inject, input } from "@angular/core";
 import { RouterLink } from "@angular/router";
+import { rxResource } from "@angular/core/rxjs-interop";
+import { CourseService } from "../../services/course.service";
 
 @Component({
   selector: "app-course-detail",
@@ -9,12 +11,14 @@ import { RouterLink } from "@angular/router";
   styleUrl: "./course-detail.scss",
 })
 export class CourseDetailComponent {
+  private courseService = inject(CourseService);
+
   // Receives the parameter ":id" directly from the URL route /courses/:id
   id = input.required<string>();
 
-  constructor() {
-    effect(() => {
-      console.log(`Loading course detail for ID: ${this.id()}`);
-    });
-  }
+  // Updated to match latest Angular rxResource signature (params / stream)
+  courseResource = rxResource({
+    params: () => ({ id: this.id() }),
+    stream: ({ params }) => this.courseService.getById(params.id)
+  });
 }

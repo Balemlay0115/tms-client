@@ -1,3 +1,52 @@
-<h1>Course Detail</h1>
-<p>Course ID: {{ id() }}</p>
-<a routerLink="/dashboard">Back to Dashboard</a>
+<div class="course-detail-container">
+  <a routerLink="/dashboard" class="back-link">← Back to Dashboard</a>
+
+  @if (courseResource.isLoading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading course details...</p>
+    </div>
+  }
+
+  @if (courseResource.error()) {
+    <div class="error-banner">
+      <p>⚠️ Failed to load details for this course. Please try again.</p>
+    </div>
+  }
+
+  @if (courseResource.value(); as course) {
+    <div class="detail-card">
+      <div class="header">
+        <h2>{{ course.title }}</h2>
+        <span class="code-badge">{{ course.code }}</span>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-item">
+          <label>Capacity</label>
+          <span>{{ course.enrollmentCount }} / {{ course.maxCapacity }} Students Enrolled</span>
+        </div>
+        <div class="info-item">
+          <label>Status</label>
+          <span
+            class="status-badge"
+            [class.closed]="course.enrollmentCount >= course.maxCapacity"
+          >
+            {{ course.enrollmentCount >= course.maxCapacity ? "Full" : "Open for Enrollment" }}
+          </span>
+        </div>
+      </div>
+
+      <div class="actions">
+        <a
+          [routerLink]="['/enroll']"
+          [queryParams]="{ courseId: course.id }"
+          class="btn btn-primary"
+          [class.disabled]="course.enrollmentCount >= course.maxCapacity"
+        >
+          Enroll in this Course
+        </a>
+      </div>
+    </div>
+  }
+</div>
