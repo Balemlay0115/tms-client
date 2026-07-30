@@ -6,7 +6,7 @@ import {
   ReactiveFormsModule,
 } from "@angular/forms";
 import { ActivatedRoute, RouterLink, Router } from "@angular/router";
-import { CourseService } from "../../services/course.service";
+import { CourseService, EnrollmentPayload } from "../../services/course.service";
 
 @Component({
   selector: "app-enrollment-form",
@@ -26,11 +26,16 @@ export class EnrollmentFormComponent implements OnInit {
   errorMessage = signal<string | null>(null);
 
   form = this.fb.nonNullable.group({
+    // Updated to accept positive numbers matching your API contract
     studentId: [
-      "",
-      [Validators.required, Validators.pattern("^STU-[0-9]{4}$")],
+      3,
+      [Validators.required, Validators.min(1)],
     ],
-    courseId: ["", Validators.required],
+    // Validates formats like MAT-101, CS-101, or CSE-101
+    courseId: [
+      "MAT-101",
+      [Validators.required, Validators.pattern(/^[A-Z]{2,4}-\d{3}$/i)],
+    ],
     term: ["Fall 2026", Validators.required],
     notes: [""],
     backupCourses: this.fb.array<FormControl<string>>([]),
@@ -38,8 +43,25 @@ export class EnrollmentFormComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
-      if (params["courseId"]) {
-        this.form.patchValue({ courseId: String(params["courseId"]) });
+      const codeOrId = params["courseCode"] || params["courseId"];
+      if (codeOrId) {
+        const paramValue = String(codeOrId).trim();
+        
+        // If passed as course code (e.g. MAT-101)
+        if (/^[A-Z]{2,4}-\d{3}$/i.test(paramValue)) {
+          this.form.patchValue({ courseId: paramValue.toUpperCase() });
+        } 
+        // If passed as numeric ID (e.g. 3), fetch course details to resolve code
+        else if (!isNaN(Number(paramValue))) {
+          this.courseService.getById(paramValue).subscribe({
+            next: (course) => {
+              if (course?.code) {
+                this.form.patchValue({ courseId: course.code.toUpperCase() });
+              }
+            },
+            error: (err) => console.warn("Could not resolve course code for ID:", paramValue)
+          });
+        }
       }
     });
   }
@@ -52,7 +74,7 @@ export class EnrollmentFormComponent implements OnInit {
     this.backups.push(
       this.fb.control("", {
         nonNullable: true,
-        validators: Validators.required,
+        validators: [Validators.required, Validators.pattern(/^[A-Z]{2,4}-\d{3}$/i)],
       })
     );
   }
@@ -66,17 +88,39 @@ export class EnrollmentFormComponent implements OnInit {
       this.isSubmitting.set(true);
       this.errorMessage.set(null);
 
-      const payload = this.form.getRawValue();
+      const raw = this.form.getRawValue();
+
+      // Clean numeric conversion ensuring StudentId is a positive number
+      const numericStudentId = Number(raw.studentId);
+
+      const payload: EnrollmentPayload = {
+        studentId: numericStudentId,
+        courseCode: raw.courseId.toUpperCase().trim(),
+        term: raw.term,
+        notes: raw.notes,
+        backupCourses: raw.backupCourses
+      };
+
+      console.log("Sending Enrollment Payload:", payload);
 
       this.courseService.enroll(payload).subscribe({
-        next: (res) => {
+        next: () => {
           this.isSubmitting.set(false);
           this.submitted.set(true);
         },
         error: (err) => {
-          console.warn("Backend API call failed, proceeding with UI feedback:", err);
+          console.error("Enrollment POST failed:", err);
           this.isSubmitting.set(false);
-          this.submitted.set(true);
+
+          if (err.status === 409) {
+            this.errorMessage.set(err.error?.detail || "You are already enrolled in this course.");
+          } else if (err.status === 404) {
+            this.errorMessage.set("The specified course code or student ID does not exist.");
+          } else {
+            this.errorMessage.set(
+              err?.error?.detail || err?.error?.title || "Failed to submit enrollment request."
+            );
+          }
         },
       });
     } else {

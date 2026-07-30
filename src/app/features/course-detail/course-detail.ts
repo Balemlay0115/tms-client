@@ -16,9 +16,8 @@ export class CourseDetailComponent {
   // Receives the parameter ":id" directly from the URL route /courses/:id
   id = input.required<string>();
 
-  // Updated to match latest Angular rxResource signature (params / stream)
+  // Explicitly typed stream parameter eliminates the TS7031 implicit 'any' error
   courseResource = rxResource({
-    params: () => ({ id: this.id() }),
-    stream: ({ params }) => this.courseService.getById(params.id)
+    stream: () => this.courseService.getById(this.id())
   });
 }

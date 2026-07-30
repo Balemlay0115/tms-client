@@ -15,33 +15,41 @@
   } @else {
     <form [formGroup]="form" (ngSubmit)="submit()" class="enrollment-form">
       
+      <!-- API Error Message Display -->
+      @if (errorMessage()) {
+        <div class="error-banner">
+          {{ errorMessage() }}
+        </div>
+      }
+
       <!-- Student ID -->
       <div class="form-group">
         <label for="studentId">Student ID</label>
         <input
           id="studentId"
+          type="number"
           formControlName="studentId"
-          placeholder="e.g. STU-1234"
+          placeholder="e.g. 3"
           class="form-control"
           [class.is-invalid]="form.controls.studentId.touched && form.controls.studentId.invalid"
         />
         @if (form.controls.studentId.touched && form.controls.studentId.invalid) {
-          <span class="error-msg">Enter a valid Student ID (format: STU-0000)</span>
+          <span class="error-msg">Student ID must be a positive number.</span>
         }
       </div>
 
-      <!-- Course ID -->
+      <!-- Course Code -->
       <div class="form-group">
-        <label for="courseId">Course ID</label>
+        <label for="courseId">Course Code</label>
         <input
           id="courseId"
           formControlName="courseId"
-          placeholder="e.g. 1 (TMS course primary key)"
+          placeholder="e.g. MAT-101"
           class="form-control"
           [class.is-invalid]="form.controls.courseId.touched && form.controls.courseId.invalid"
         />
         @if (form.controls.courseId.touched && form.controls.courseId.invalid) {
-          <span class="error-msg">Course ID is required</span>
+          <span class="error-msg">Course Code is required (e.g., MAT-101)</span>
         }
       </div>
 
@@ -64,7 +72,7 @@
           <div class="backup-row">
             <input
               [formControl]="backup"
-              [placeholder]="'Backup course ' + ($index + 1)"
+              [placeholder]="'Backup course code ' + ($index + 1) + ' (e.g. CS-101)'"
               class="form-control"
             />
             <button type="button" class="btn-remove" (click)="removeBackup($index)">

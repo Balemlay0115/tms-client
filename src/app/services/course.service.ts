@@ -1,27 +1,13 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-
-export interface Course {
-  id: number;
-  code: string;
-  title: string;
-  maxCapacity: number;
-  enrollmentCount: number;
-}
-
-export interface PagedResponse<T> {
-  items: T[];
-  totalCount: number;
-  page: number;
-  pageSize: number;
-}
+import { map, tap } from 'rxjs/operators';
+import { Course, CourseDetail, PagedResponse } from '../models/course.model';
 
 export interface EnrollmentPayload {
-  studentId: string;
-  courseId: string | number;
-  term: string;
+  studentId?: number;
+  courseCode: string;   // camelCase for ASP.NET Core deserialization
+  term?: string;
   notes?: string;
   backupCourses?: string[];
 }
@@ -31,23 +17,33 @@ export interface EnrollmentPayload {
 })
 export class CourseService {
   private http = inject(HttpClient);
-  private baseUrl = 'http://localhost:5065/api/v1/courses';
+  
+  // V2 Endpoints on port 5065
+  private baseUrl = 'http://localhost:5065/api/v2/courses';
+  private enrollUrl = 'http://localhost:5065/api/v2/enrollments';
 
   getAll(page = 1, pageSize = 50): Observable<Course[]> {
     return this.http
       .get<PagedResponse<Course>>(this.baseUrl, {
         params: { page: page.toString(), pageSize: pageSize.toString() }
       })
-      .pipe(map((response) => response.items));
+      .pipe(
+        tap((res) => console.log('V2 API Payload Response:', res)),
+        map((response) => {
+          if (Array.isArray(response?.data)) return response.data;
+          if (Array.isArray((response as any)?.items)) return (response as any).items;
+          if (Array.isArray(response)) return response;
+          return [];
+        })
+      );
   }
 
-  // Fetches a single course by ID
-  getById(id: string | number): Observable<Course> {
-    return this.http.get<Course>(`${this.baseUrl}/${id}`);
+  getById(id: string | number): Observable<CourseDetail> {
+    return this.http.get<CourseDetail>(`${this.baseUrl}/${id}`);
   }
 
-  // Submits an enrollment payload to the server
+  // Sends payload matching C# CourseCode requirement
   enroll(payload: EnrollmentPayload): Observable<any> {
-    return this.http.post(`${this.baseUrl}/enroll`, payload);
+    return this.http.post(this.enrollUrl, payload);
   }
 }

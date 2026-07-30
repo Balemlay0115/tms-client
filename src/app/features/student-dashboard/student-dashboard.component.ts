@@ -1,7 +1,8 @@
 import { Component, inject, signal, computed } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { CourseService, Course } from '../../services/course.service';
+import { CourseService } from '../../services/course.service';
+import { Course } from '../../models/course.model';
 import { CourseCardComponent } from '../../ui/course-card/course-card';
 
 @Component({
@@ -24,35 +25,22 @@ export class StudentDashboardComponent {
     this.earnedCredits() >= 120 ? 'Eligible for Graduation' : 'In Progress'
   );
 
-  // rxResource stream call to backend
+  // Fetches catalog from GET /api/v2/courses
   coursesResource = rxResource({
     stream: () => this.courseService.getAll()
   });
 
-  // Method called by: (click)="registerForClass()"
   registerForClass() {
     this.earnedCredits.update((credits) => credits + 3);
   }
 
-  // Method called by: (enrollClicked)="handleEnroll($event)"
+  // Pure navigation handler when clicking "Enroll" on a course card
   handleEnroll(course: Course) {
     if (course.enrollmentCount < course.maxCapacity) {
-      // 1. Locally update the resource value so enrollment increments instantly
-      const currentList = this.coursesResource.value();
-      if (currentList) {
-        this.coursesResource.set(
-          currentList.map((c) =>
-            c.id === course.id
-              ? { ...c, enrollmentCount: c.enrollmentCount + 1 }
-              : c
-          )
-        );
-      }
-
-      // 2. Track selected course
+      // 1. Set the selected course signal for toast/UI tracking
       this.selectedCourse.set(course);
 
-      // 3. Navigate to enrollment form with pre-filled course ID parameter
+      // 2. Navigate straight to the enrollment form passing courseId in query parameters
       this.router.navigate(['/enroll'], { queryParams: { courseId: course.id } });
     }
   }

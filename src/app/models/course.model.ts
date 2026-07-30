@@ -1,5 +1,5 @@
 /**
- * List row from the TMS API mirrors CourseResponseDto on GET /api/courses.
+ * List row from the TMS API mirrors CourseResponseDto on GET /api/v2/courses.
  * ASP.NET Core defaults to camelCase JSON (id, maxCapacity, ..).
  */
 export interface Course {
@@ -10,21 +10,8 @@ export interface Course {
   enrollmentCount: number;
 }
 
-/** 
- * Envelope for GET /api/courses TMS API contract List shape (PagedResponse<T>). 
- */
-export interface PagedResponse<T> {
-  items: T[];
-  totalCount: number;
-  page: number;
-  pageSize: number;
-  totalPages: number;
-  hasPrevious: boolean;
-  hasNext: boolean;
-}
-
-/** 
- * One Link from CourseDetailDto. Links on GET /api/courses/{id}. 
+/**
+ * Hypermedia link object returned in V2 responses.
  */
 export interface CourseLink {
   href: string;
@@ -32,8 +19,40 @@ export interface CourseLink {
   method: string;
 }
 
+/**
+ * Pagination metadata returned inside the V2 response wrapper.
+ */
+export interface PagedMeta {
+  totalCount: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+  hasNext: boolean;
+  hasPrevious: boolean;
+}
+
 /** 
- * Detail payload mirrors CourseDetailDto (List rows do not include links). 
+ * Hypermedia links returned on the GET /api/v2/courses catalogue wrapper.
+ */
+export interface CatalogueLinks {
+  self: string;
+  next: string | null;
+  prev: string | null;
+  enroll: string;
+}
+
+/** 
+ * Envelope for GET /api/v2/courses (V2 API contract List shape).
+ */
+export interface PagedResponse<T> {
+  data: T[];
+  items?: T[];
+  meta?: PagedMeta;
+  links?: CatalogueLinks;
+}
+
+/** 
+ * Detail payload mirrors CourseDetailDto (includes course details + hypermedia links). 
  */
 export interface CourseDetail extends Course {
   links: readonly CourseLink[];
