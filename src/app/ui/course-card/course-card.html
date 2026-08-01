@@ -1,43 +1,26 @@
 <div class="card">
   <div class="card-header">
-    <span class="course-code">{{ course().code }}</span>
-    <span
-      class="badge"
-      [class.closed]="course().enrollmentCount >= course().maxCapacity"
-    >
-      {{ course().enrollmentCount >= course().maxCapacity ? "Full" : "Accepting enrollments" }}
-    </span>
+    <span class="course-code">CSE-101</span>
+    <span class="badge">Open</span>
   </div>
 
   <div class="card-body">
     <h3 class="card-title">
-      <a [routerLink]="['/courses', course().id]">{{ course().title }}</a>
+      <a href="#">Advanced Java Services</a>
     </h3>
-
+    
     <div class="capacity-info">
       <div class="capacity-text">
         <span>Enrolled</span>
-        <strong>{{ course().enrollmentCount }} / {{ course().maxCapacity }} seats</strong>
+        <span><strong>10</strong> of 30 seats</span>
       </div>
-
-      <!-- Enrollment progress bar -->
       <div class="progress-bar">
-        <div
-          class="progress-fill"
-          [style.width.%]="(course().enrollmentCount / course().maxCapacity) * 100"
-          [class.full]="course().enrollmentCount >= course().maxCapacity"
-        ></div>
+        <div class="progress-fill" style="width: 33%;"></div>
       </div>
     </div>
   </div>
 
   <div class="card-footer">
-    <button
-      class="btn-enroll"
-      (click)="enrollClicked.emit(course())"
-      [disabled]="course().enrollmentCount >= course().maxCapacity"
-    >
-      Enroll
-    </button>
+    <button class="btn-enroll">Enroll</button>
   </div>
 </div>

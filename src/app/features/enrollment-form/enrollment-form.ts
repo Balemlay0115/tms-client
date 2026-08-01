@@ -6,6 +6,7 @@ import {
   ReactiveFormsModule,
 } from "@angular/forms";
 import { ActivatedRoute, RouterLink, Router } from "@angular/router";
+import { switchMap } from "rxjs/operators";
 import { CourseService, EnrollmentPayload } from "../../services/course.service";
 
 @Component({
@@ -26,10 +27,10 @@ export class EnrollmentFormComponent implements OnInit {
   errorMessage = signal<string | null>(null);
 
   form = this.fb.nonNullable.group({
-    // Updated to accept positive numbers matching your API contract
+    // Student ID is required and must follow STU-0000 format.
     studentId: [
-      3,
-      [Validators.required, Validators.min(1)],
+      "",
+      [Validators.required, Validators.pattern(/^STU-\d{4}$/i)],
     ],
     // Validates formats like MAT-101, CS-101, or CSE-101
     courseId: [
@@ -83,6 +84,18 @@ export class EnrollmentFormComponent implements OnInit {
     this.backups.removeAt(index);
   }
 
+  private resolveStudentId(studentResponse: any, fallback: string): number | string {
+    if (!studentResponse) {
+      return fallback;
+    }
+
+    const candidate = studentResponse.studentId ?? studentResponse.id ?? studentResponse.student?.studentId ?? studentResponse.student?.id ?? studentResponse.studentCode ?? studentResponse.code;
+
+    return typeof candidate === "number" || typeof candidate === "string"
+      ? candidate
+      : fallback;
+  }
+
   submit() {
     if (this.form.valid) {
       this.isSubmitting.set(true);
@@ -90,20 +103,25 @@ export class EnrollmentFormComponent implements OnInit {
 
       const raw = this.form.getRawValue();
 
-      // Clean numeric conversion ensuring StudentId is a positive number
-      const numericStudentId = Number(raw.studentId);
-
       const payload: EnrollmentPayload = {
-        studentId: numericStudentId,
         courseCode: raw.courseId.toUpperCase().trim(),
         term: raw.term,
         notes: raw.notes,
         backupCourses: raw.backupCourses
       };
 
-      console.log("Sending Enrollment Payload:", payload);
+      const studentIdValue = String(raw.studentId ?? "").trim().toUpperCase();
+      console.log("Creating student and submitting enrollment:", studentIdValue);
 
-      this.courseService.enroll(payload).subscribe({
+      this.courseService.createStudent(studentIdValue).pipe(
+        switchMap((studentResponse) => {
+          const resolvedStudentId = this.resolveStudentId(studentResponse, studentIdValue);
+          return this.courseService.enroll({
+            ...payload,
+            studentId: resolvedStudentId,
+          });
+        })
+      ).subscribe({
         next: () => {
           this.isSubmitting.set(false);
           this.submitted.set(true);
@@ -114,12 +132,9 @@ export class EnrollmentFormComponent implements OnInit {
 
           if (err.status === 409) {
             this.errorMessage.set(err.error?.detail || "You are already enrolled in this course.");
-          } else if (err.status === 404) {
-            this.errorMessage.set("The specified course code or student ID does not exist.");
           } else {
-            this.errorMessage.set(
-              err?.error?.detail || err?.error?.title || "Failed to submit enrollment request."
-            );
+            const backendMessage = err?.error?.detail || err?.error?.title || err?.message || "Failed to submit enrollment request.";
+            this.errorMessage.set(backendMessage);
           }
         },
       });

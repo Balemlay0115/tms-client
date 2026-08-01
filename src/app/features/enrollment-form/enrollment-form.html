@@ -27,14 +27,14 @@
         <label for="studentId">Student ID</label>
         <input
           id="studentId"
-          type="number"
+          type="text"
           formControlName="studentId"
-          placeholder="e.g. 3"
+          placeholder="e.g. STU-0001"
           class="form-control"
           [class.is-invalid]="form.controls.studentId.touched && form.controls.studentId.invalid"
         />
         @if (form.controls.studentId.touched && form.controls.studentId.invalid) {
-          <span class="error-msg">Student ID must be a positive number.</span>
+          <span class="error-msg">Student ID is required and must match the format STU-0000.</span>
         }
       </div>
 

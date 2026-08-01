@@ -5,7 +5,7 @@ import { map, tap } from 'rxjs/operators';
 import { Course, CourseDetail, PagedResponse } from '../models/course.model';
 
 export interface EnrollmentPayload {
-  studentId?: number;
+  studentId?: number | string;
   courseCode: string;   // camelCase for ASP.NET Core deserialization
   term?: string;
   notes?: string;
@@ -21,6 +21,7 @@ export class CourseService {
   // V2 Endpoints on port 5065
   private baseUrl = 'http://localhost:5065/api/v2/courses';
   private enrollUrl = 'http://localhost:5065/api/v2/enrollments';
+  private studentsUrl = 'http://localhost:5065/api/v2/students';
 
   getAll(page = 1, pageSize = 50): Observable<Course[]> {
     return this.http
@@ -40,6 +41,17 @@ export class CourseService {
 
   getById(id: string | number): Observable<CourseDetail> {
     return this.http.get<CourseDetail>(`${this.baseUrl}/${id}`);
+  }
+
+  createStudent(studentId: string): Observable<any> {
+    const payload = {
+      studentId,
+      studentCode: studentId,
+      code: studentId,
+      name: `Student ${studentId}`
+    };
+
+    return this.http.post(this.studentsUrl, payload);
   }
 
   // Sends payload matching C# CourseCode requirement
