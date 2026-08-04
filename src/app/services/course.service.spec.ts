@@ -28,7 +28,7 @@ describe('CourseService', () => {
 
     const req = httpMock.expectOne('http://localhost:5065/api/v2/students');
     expect(req.request.method).toBe('POST');
-    expect(req.request.body).toEqual(jasmine.objectContaining({ studentId: 'STU-0001' }));
+    expect(req.request.body).toEqual(expect.objectContaining({ studentId: 'STU-0001' }));
     req.flush({ id: 42 });
   });
 });

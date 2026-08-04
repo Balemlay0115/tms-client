@@ -1,25 +1,26 @@
-<section class="instructor-dashboard">
-  <header class="hero-card">
-    <div>
-      <p class="eyebrow">Instructor Workspace</p>
-      <h1>Welcome back, Dr. Rivera</h1>
-      <p class="subtitle">Manage your courses, monitor enrollments, and keep teaching on track.</p>
+<!-- Renders instantly on any connection speed -->
+<div class="dashboard-header">
+  <h1>Instructor Command Center</h1>
+  <div class="kpi-row">
+    <div class="kpi-card">
+      <span class="kpi-value">{{ store.entities().length }}</span>
+      <span class="kpi-label">Total Enrollments</span>
     </div>
-    <button class="primary-btn">Create Course</button>
-  </header>
-
-  <div class="stats-grid">
-    <article class="stat-card">
-      <h3>Active Courses</h3>
-      <p class="stat-value">6</p>
-    </article>
-    <article class="stat-card">
-      <h3>Pending Enrollments</h3>
-      <p class="stat-value">18</p>
-    </article>
-    <article class="stat-card">
-      <h3>Students Served</h3>
-      <p class="stat-value">142</p>
-    </article>
+    <div class="kpi-card pending">
+      <span class="kpi-value">{{ store.pendingCount() }}</span>
+      <span class="kpi-label">Pending Approval</span>
+    </div>
   </div>
-</section>
+</div>
+<!-- DEFERRED UI: The chart code lives in a separate .js chunk file -->
+<div class="chart-section">
+  @defer (on viewport; prefetch on idle(500)) {
+    <tms-analytics-chart [data]="store.entities()" />
+  } @placeholder {
+    <div class="skeleton-chart">Scroll down to view analytics...</div>
+  } @loading (minimum 500ms) {
+    <div class="spinner">Downloading chart engine...</div>
+  } @error {
+    <p>Failed to load chart. Check your connection.</p>
+  }
+</div>

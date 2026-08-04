@@ -1,231 +1,193 @@
-.enrollment-wrapper {
-  max-width: 580px;
+﻿.enrollment-wrapper {
+  max-width: 680px;
   margin: 3rem auto;
   padding: 2.5rem;
-  background: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
-  border: 1px solid #e2e8f0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: rgba(17, 24, 39, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 24px;
+  box-shadow: 0 24px 60px -30px rgba(0, 0, 0, 0.75);
+  color: var(--text-main);
+  font-family: inherit;
+}
 
-  .form-header {
-    margin-bottom: 2rem;
+.enrollment-wrapper .form-header {
+  margin-bottom: 2rem;
+}
 
-    .back-link {
-      display: inline-block;
-      color: #64748b;
-      font-size: 0.875rem;
-      font-weight: 600;
-      text-decoration: none;
-      margin-bottom: 1rem;
-      transition: color 0.15s ease;
+.enrollment-wrapper .back-link {
+  display: inline-block;
+  color: var(--accent-neon);
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none;
+  margin-bottom: 1rem;
+  transition: color 0.2s ease;
+}
 
-      &:hover {
-        color: #4f46e5;
-      }
-    }
+.enrollment-wrapper .back-link:hover {
+  color: var(--accent-cyan);
+}
 
-    h2 {
-      margin: 0 0 0.35rem 0;
-      color: #0f172a;
-      font-size: 1.75rem;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-    }
+.enrollment-wrapper h2 {
+  margin: 0 0 0.35rem 0;
+  color: var(--text-main);
+  font-size: 2rem;
+  font-weight: 800;
+}
 
-    .subtitle {
-      margin: 0;
-      color: #64748b;
-      font-size: 0.95rem;
-    }
-  }
+.enrollment-wrapper .subtitle {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
 
-  .form-group {
-    margin-bottom: 1.35rem;
-    display: flex;
-    flex-direction: column;
+.enrollment-wrapper .form-group {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
 
-    label {
-      font-weight: 600;
-      margin-bottom: 0.45rem;
-      color: #334155;
-      font-size: 0.875rem;
-    }
+.enrollment-wrapper label {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-main);
+  font-size: 0.95rem;
+}
 
-    .form-control {
-      padding: 0.75rem 1rem;
-      border: 1px solid #cbd5e1;
-      border-radius: 8px;
-      font-size: 0.95rem;
-      color: #0f172a;
-      background-color: #ffffff;
-      transition: all 0.2s ease;
+.enrollment-wrapper .form-control {
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  font-size: 0.95rem;
+  color: var(--text-main);
+  background-color: rgba(255, 255, 255, 0.04);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
 
-      &:focus {
-        outline: none;
-        border-color: #4f46e5;
-        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
-      }
+.enrollment-wrapper .form-control:focus {
+  outline: none;
+  border-color: rgba(56, 189, 248, 0.45);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.12);
+}
 
-      &.is-invalid {
-        border-color: #ef4444;
-        background-color: #fef2f2;
-      }
-    }
+.enrollment-wrapper .form-control.is-invalid {
+  border-color: #f87171;
+  background-color: rgba(248, 113, 113, 0.08);
+}
 
-    .error-msg {
-      color: #dc2626;
-      font-size: 0.8rem;
-      margin-top: 0.4rem;
-      font-weight: 500;
-    }
-  }
+.enrollment-wrapper .error-msg {
+  color: #fda4af;
+  font-size: 0.85rem;
+  margin-top: 0.4rem;
+  font-weight: 600;
+}
 
-  .backup-card {
-    margin: 1.75rem 0;
-    padding: 1.25rem;
-    background-color: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
+.enrollment-wrapper .backup-card {
+  margin: 1.75rem 0;
+  padding: 1.4rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+}
 
-    h3 {
-      margin: 0 0 1rem 0;
-      font-size: 1rem;
-      font-weight: 700;
-      color: #1e293b;
-    }
+.enrollment-wrapper .backup-card h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
 
-    .backup-row {
-      display: flex;
-      gap: 0.5rem;
-      margin-bottom: 0.75rem;
+.enrollment-wrapper .backup-row {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 0.9rem;
+}
 
-      .form-control {
-        flex: 1;
-        padding: 0.65rem 0.85rem;
-        border: 1px solid #cbd5e1;
-        border-radius: 8px;
-        font-size: 0.9rem;
+.enrollment-wrapper .backup-row .form-control {
+  flex: 1;
+}
 
-        &:focus {
-          outline: none;
-          border-color: #4f46e5;
-          box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
-        }
-      }
+.enrollment-wrapper .btn-remove {
+  background: rgba(248, 113, 113, 0.12);
+  color: #fecaca;
+  border: 1px solid rgba(248, 113, 113, 0.25);
+  border-radius: 12px;
+  padding: 0 1rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
 
-      .btn-remove {
-        background-color: #fee2e2;
-        color: #991b1b;
-        border: none;
-        border-radius: 8px;
-        padding: 0 1rem;
-        font-size: 0.85rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background-color 0.2s ease;
+.enrollment-wrapper .btn-remove:hover {
+  background: rgba(248, 113, 113, 0.2);
+}
 
-        &:hover {
-          background-color: #fecaca;
-        }
-      }
-    }
+.enrollment-wrapper .btn-add-backup {
+  background: transparent;
+  color: var(--accent-neon);
+  border: 1px dashed rgba(129, 140, 248, 0.5);
+  border-radius: 14px;
+  padding: 0.85rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+}
 
-    .btn-add-backup {
-      background-color: #ffffff;
-      color: #4f46e5;
-      border: 1px dashed #c7d2fe;
-      border-radius: 8px;
-      padding: 0.65rem 1rem;
-      font-size: 0.875rem;
-      font-weight: 600;
-      cursor: pointer;
-      width: 100%;
-      transition: all 0.2s ease;
+.enrollment-wrapper .btn-add-backup:hover {
+  background: rgba(56, 189, 248, 0.08);
+}
 
-      &:hover {
-        background-color: #e0e7ff;
-        border-color: #4f46e5;
-      }
-    }
-  }
+.enrollment-wrapper .form-actions {
+  margin-top: 1.75rem;
+}
 
-  .form-actions {
-    margin-top: 1.75rem;
-  }
+.enrollment-wrapper .btn-submit {
+  width: 100%;
+  padding: 0.95rem;
+  background: var(--accent-gradient);
+  color: #ffffff;
+  border: none;
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: 700;
+  box-shadow: 0 14px 30px rgba(99, 102, 241, 0.25);
+}
 
-  .btn-submit {
-    width: 100%;
-    padding: 0.85rem;
-    background-color: #4f46e5;
-    color: #ffffff;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
-    transition: all 0.2s ease;
+.enrollment-wrapper .btn-submit:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
 
-    &:hover:not(:disabled) {
-      background-color: #4338ca;
-      transform: translateY(-1px);
-      box-shadow: 0 6px 16px rgba(79, 70, 229, 0.35);
-    }
+.enrollment-wrapper .success-card {
+  text-align: center;
+  padding: 2.5rem 1.2rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 22px;
+}
 
-    &:disabled {
-      background-color: #cbd5e1;
-      color: #94a3b8;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
-  }
+.enrollment-wrapper .success-card .icon-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  background: rgba(56, 189, 248, 0.18);
+  color: var(--accent-cyan);
+  font-size: 1.75rem;
+  font-weight: 800;
+  border-radius: 50%;
+  margin-bottom: 1.25rem;
+}
 
-  .success-card {
-    text-align: center;
-    padding: 2.5rem 1rem;
+.enrollment-wrapper .success-card h3 {
+  color: var(--text-main);
+}
 
-    .icon-circle {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 56px;
-      height: 56px;
-      background-color: #dcfce7;
-      color: #15803d;
-      font-size: 1.75rem;
-      font-weight: 700;
-      border-radius: 50%;
-      margin-bottom: 1.25rem;
-    }
+.enrollment-wrapper .success-card p {
+  color: var(--text-muted);
+}
 
-    h3 {
-      margin: 0 0 0.5rem 0;
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: #0f172a;
-    }
-
-    p {
-      color: #64748b;
-      margin: 0 0 1.75rem 0;
-      font-size: 0.95rem;
-    }
-
-    .btn-primary {
-      display: inline-block;
-      padding: 0.75rem 1.5rem;
-      background-color: #4f46e5;
-      color: #ffffff;
-      text-decoration: none;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 0.95rem;
-      transition: background-color 0.2s ease;
-
-      &:hover {
-        background-color: #4338ca;
-      }
-    }
-  }
+.enrollment-wrapper .btn-primary {
+  background: var(--accent-gradient);
+  color: #ffffff;
 }
