@@ -20,11 +20,9 @@ export const EnrollmentStore = signalStore(
 { providedIn: 'root' },
 
 withState({ isLoading: false, error: null as string | null }),
-
+withEntities<Enrollment>(),
 withComputed((store) => ({
-pendingCount: computed(
-() => store.entities().filter(e => e.status === 'Pending').length
-),
+pendingCount: computed(() => store.entities().filter(e => e.status === 'Pending').length),
 })),
 withMethods((store, api = inject(EnrollmentService)) => ({
 
