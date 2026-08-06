@@ -9,7 +9,7 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'student',
+    path: 'dashboard',
     loadComponent: () =>
       import('./features/student-dashboard/student-dashboard.component').then(
         (m) => m.StudentDashboardComponent,
@@ -32,5 +32,5 @@ export const routes: Routes = [
         (m) => m.EnrollmentListComponent,
       ),
   },
-  { path: '', redirectTo: 'instructor', pathMatch: 'full' },
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
 ];

@@ -6,7 +6,7 @@ import { Course, CourseDetail, PagedResponse } from '../models/course.model';
 
 export interface EnrollmentPayload {
   studentId?: number | string;
-  courseCode: string;   // camelCase for ASP.NET Core deserialization
+  courseCode: string;   
   term?: string;
   notes?: string;
   backupCourses?: string[];
@@ -18,7 +18,6 @@ export interface EnrollmentPayload {
 export class CourseService {
   private http = inject(HttpClient);
   
-  // V2 Endpoints on port 5065
   private baseUrl = 'http://localhost:5065/api/v2/courses';
   private enrollUrl = 'http://localhost:5065/api/v2/enrollments';
   private studentsUrl = 'http://localhost:5065/api/v2/students';
@@ -50,11 +49,9 @@ export class CourseService {
       code: studentId,
       name: `Student ${studentId}`
     };
-
     return this.http.post(this.studentsUrl, payload);
   }
 
-  // Sends payload matching C# CourseCode requirement
   enroll(payload: EnrollmentPayload): Observable<any> {
     return this.http.post(this.enrollUrl, payload);
   }
