@@ -1,21 +1,26 @@
 <div class="card">
-  <h3>
-    <a [routerLink]="['/courses', course().id]">{{ course().title }}</a>
-    ({{ course().code }})
-  </h3>
-  <p>
-    Enrolled {{ course().enrollmentCount }} of {{ course().maxCapacity }} seats
-  </p>
-  <span
-    class="badge"
-    [class.closed]="course().enrollmentCount >= course().maxCapacity"
-  >
-    {{ course().enrollmentCount >= course().maxCapacity ? "Full" : "Accepting enrollments" }}
-  </span>
-  <button
-    (click)="enrollClicked.emit(course())"
-    [disabled]="course().enrollmentCount >= course().maxCapacity"
-  >
-    Enroll
-  </button>
+  <div class="card-header">
+    <span class="course-code">CSE-101</span>
+    <span class="badge">Open</span>
+  </div>
+
+  <div class="card-body">
+    <h3 class="card-title">
+      <a href="#">Advanced Java Services</a>
+    </h3>
+    
+    <div class="capacity-info">
+      <div class="capacity-text">
+        <span>Enrolled</span>
+        <span><strong>10</strong> of 30 seats</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" style="width: 33%;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-footer">
+    <button class="btn-enroll">Enroll</button>
+  </div>
 </div>

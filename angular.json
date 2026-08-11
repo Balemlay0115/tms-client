@@ -10,7 +10,8 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "scss"
+          "style": "scss",
+          "type": "component"
         }
       },
       "root": "",
@@ -52,12 +53,19 @@
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.development.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
         },
         "serve": {
+          "options": {"proxyConfig": "proxy.conf.json"},
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
@@ -72,6 +80,7 @@
         "test": {
           "builder": "@angular/build:unit-test"
         }
+
       }
     }
   }

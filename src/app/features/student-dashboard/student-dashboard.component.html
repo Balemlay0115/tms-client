@@ -1,53 +1,75 @@
-<div class="dashboard">
-  <h1>Welcome, {{ studentName() }}</h1>
-  <p>Credits Earned: {{ earnedCredits() }}</p>
-  <p>Graduation Status: {{ graduationStatus() }}</p>
-  <button (click)="registerForClass()">
-    Register for a Class (+3 credits)
-  </button>
-</div>
-
-<div class="enroll-link">
-  <a routerLink="/enroll" class="btn btn-primary">
-    Enroll in Course
-  </a>
-</div>
-
-<h2>Course Catalog</h2>
-
-<!-- 1. Loading State -->
-@if (coursesResource.isLoading()) {
-  <div class="loading-state">
-    <p>Loading course catalogue...</p>
-  </div>
-}
-
-<!-- 2. Error State -->
-@if (coursesResource.error()) {
-  <div class="error-state">
-    <p>Failed to load courses. Please make sure the backend API is running on port 5065.</p>
-  </div>
-}
-
-<!-- 3. Dynamic Course Data Stream -->
-@if (coursesResource.value(); as courses) {
-  @if (courses.length === 0) {
-    <div class="empty-state">
-      <p>No courses are available this term. Check back during registration.</p>
+<div class="dashboard-container">
+  <!-- Header / Welcome Banner -->
+  <div class="welcome-card">
+    <div class="header-content">
+      <h1>Welcome, {{ studentName() }}</h1>
+      <p class="subtitle">Academic Overview & Current Progress</p>
     </div>
-  } @else {
-    <div class="grid">
-      @for (course of courses; track course.id) {
-        <tms-course-card [course]="course" (enrollClicked)="handleEnroll($event)" />
-      } @empty {
-        <p>No results match your search.</p>
+
+    <div class="stats-row">
+      <div class="stat-box">
+        <span class="stat-label">Credits Earned</span>
+        <span class="stat-value">{{ earnedCredits() }}</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-label">Graduation Status</span>
+        <span class="stat-value badge-status">{{ graduationStatus() }}</span>
+      </div>
+    </div>
+
+    <div class="action-bar">
+      <button class="btn btn-secondary" (click)="registerForClass()">
+        ⚡ Quick Credit Test (+3 credits)
+      </button>
+      <a routerLink="/enroll" class="btn btn-primary">
+        📝 Form Enrollment
+      </a>
+    </div>
+  </div>
+
+  <!-- Course Catalog Section -->
+  <div class="catalog-section">
+    <div class="section-header">
+      <h2>Course Catalog</h2>
+    </div>
+
+    <!-- 1. Loading State -->
+    @if (coursesResource.isLoading()) {
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Loading course catalogue...</p>
+      </div>
+    }
+
+    <!-- 2. Error State -->
+    @if (coursesResource.error()) {
+      <div class="error-state">
+        <p>⚠️ Failed to load courses. Please make sure the backend API is running on port 5065.</p>
+      </div>
+    }
+
+    <!-- 3. Dynamic Course Data Stream -->
+    @if (coursesResource.value(); as courses) {
+      @if (courses.length === 0) {
+        <div class="empty-state">
+          <p>No courses are available this term. Check back during registration.</p>
+        </div>
+      } @else {
+        <div class="grid">
+          @for (course of courses; track course.id) {
+            <tms-course-card [course]="course" (enrollClicked)="handleEnroll($event)" />
+          } @empty {
+            <p>No results match your search.</p>
+          }
+        </div>
       }
+    }
+  </div>
+
+  <!-- Selected Course Toast -->
+  @if (selectedCourse(); as picked) {
+    <div class="selection-hint" role="status">
+      ✨ <strong>Last enrollment request:</strong> {{ picked.title }} ({{ picked.code }})
     </div>
   }
-}
-
-@if (selectedCourse(); as picked) {
-  <p class="selection-hint" role="status">
-    Last enrollment request: <strong>{{ picked.title }}</strong> ({{ picked.code }})
-  </p>
-}
+</div>
