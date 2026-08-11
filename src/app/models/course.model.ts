@@ -8,52 +8,55 @@ export interface Course {
   title: string;
   maxCapacity: number;
   enrollmentCount: number;
+  status?: string;
 }
-
 /**
  * Hypermedia link object returned in V2 responses.
  */
-export interface CourseLink {
+/*export interface CourseLink {
   href: string;
   rel: string;
   method: string;
 }
-
+*/
 /**
  * Pagination metadata returned inside the V2 response wrapper.
  */
-export interface PagedMeta {
+/*export interface PagedMeta {
   totalCount: number;
   page: number;
   pageSize: number;
   totalPages: number;
   hasNext: boolean;
   hasPrevious: boolean;
-}
+}*/
 
-/** 
+/**
  * Hypermedia links returned on the GET /api/v2/courses catalogue wrapper.
  */
-export interface CatalogueLinks {
+/*export interface CatalogueLinks {
   self: string;
   next: string | null;
   prev: string | null;
   enroll: string;
-}
+}*/
 
-/** 
+/**
  * Envelope for GET /api/v2/courses (V2 API contract List shape).
  */
 export interface PagedResponse<T> {
-  data: T[];
-  items?: T[];
-  meta?: PagedMeta;
-  links?: CatalogueLinks;
+items: T[];
+totalCount: number;
+page: number;
+pageSize: number;
+totalPages: number;
+hasPrevious: boolean;
+hasNext: boolean;
 }
-
-/** 
- * Detail payload mirrors CourseDetailDto (includes course details + hypermedia links). 
+/**
+ * Detail payload mirrors CourseDetailDto (includes course details + hypermedia links).
  */
-export interface CourseDetail extends Course {
+/*export interface CourseDetail extends Course {
   links: readonly CourseLink[];
 }
+*/
