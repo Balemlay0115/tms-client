@@ -1,4 +1,4 @@
-import { Service, inject } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -14,12 +14,15 @@ export interface EnrollmentPayload {
   backupCourses?: string[];
 }
 
-@Service()
+@Injectable({ providedIn: 'root' })
 export class CourseService {
   private http = inject(HttpClient);
   private readonly base = `${environment.apiUrl}/courses`;
   private readonly enrollUrl = `${environment.apiUrl}/enrollments`;
   private readonly studentsUrl = `${environment.apiUrl}/students`;
+    delete(id: number): Observable<any> {
+    return this.http.delete(`${this.base}/${id}`);
+  }
 
   getAll(page: number = 1, pageSize: number = 50): Observable<Course[]> {
     return this.http
