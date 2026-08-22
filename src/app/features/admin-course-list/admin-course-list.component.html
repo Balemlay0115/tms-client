@@ -1,0 +1,28 @@
+<div class="admin-course-container">
+  <h2>Admin Course Management</h2>
+
+  <table class="course-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Course Title</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Example course row -->
+      <tr>
+        <td>1</td>
+        <td>Enterprise C# & Angular Architecture</td>
+        <td>
+          <!-- Exercise 6 Step 3: Conditional UI in Templates -->
+          @if (auth.hasRole('Admin')) {
+            <button (click)="deleteCourse(1)" class="btn-danger">
+              Delete Course
+            </button>
+          }
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

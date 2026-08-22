@@ -1,6 +1,10 @@
 import { Routes } from '@angular/router';
+import { roleGuard } from './guards/role.guard';
+import { AdminCourseListComponent } from './features/admin-course-list/admin-course-list.component';
+import { LoginComponent } from './features/login/login.component';
 
 export const routes: Routes = [
+  { path: 'login', component: LoginComponent },
   {
     path: 'dashboard',
     loadComponent: () =>
@@ -30,9 +34,15 @@ export const routes: Routes = [
   {
     path: 'grade-submission',
     loadComponent: () =>
-      import('./features/grade-submission/grade-submission.component')
-    .then( m => m.GradeSubmissionComponent,
+      import('./features/grade-submission/grade-submission.component').then(
+        (m) => m.GradeSubmissionComponent,
       ),
   },
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  
+  {
+    path: 'admin/courses',
+    component: AdminCourseListComponent,
+    canActivate: [roleGuard('Admin')],
+  },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
 ];
