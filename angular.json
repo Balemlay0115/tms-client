@@ -30,9 +30,7 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "src/styles.scss"
-            ]
+            "styles": ["src/styles.scss"]
           },
           "configurations": {
             "production": {
@@ -65,7 +63,7 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "options": {"proxyConfig": "proxy.conf.json"},
+          "options": { "proxyConfig": "proxy.conf.json" },
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
@@ -80,7 +78,6 @@
         "test": {
           "builder": "@angular/build:unit-test"
         }
-
       }
     }
   }

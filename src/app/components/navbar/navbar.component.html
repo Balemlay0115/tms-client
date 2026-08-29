@@ -1,0 +1,9 @@
+<header class="navbar">
+  <div class="brand">TMS Application</div>
+  <div class="user-menu">
+    @if (auth.currentUser(); as user) {
+      <span>{{ user.displayName }} ({{ user.role }})</span>
+    }
+    <button (click)="auth.logout()" class="btn-logout">Logout</button>
+  </div>
+</header>

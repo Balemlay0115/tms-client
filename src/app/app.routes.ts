@@ -6,7 +6,7 @@ import { LoginComponent } from './features/login/login.component';
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   {
-    path: 'dashboard',
+    path: 'instructor/dashboard',
     loadComponent: () =>
       import('./features/instructor-dashboard/instructor-dashboard.component').then(
         (m) => m.InstructorDashboardComponent,
@@ -26,6 +26,13 @@ export const routes: Routes = [
       import('./features/course-detail/course-detail').then((m) => m.CourseDetailComponent),
   },
   {
+    path: 'student',
+    loadComponent: () =>
+      import('./features/student-dashboard/student-dashboard.component').then(
+        (m) => m.StudentDashboardComponent,
+      ),
+  },
+  {
     path: 'enroll',
     loadComponent: () =>
       import('./features/enrollment-form/enrollment-form').then((m) => m.EnrollmentFormComponent),
@@ -38,7 +45,7 @@ export const routes: Routes = [
         (m) => m.GradeSubmissionComponent,
       ),
   },
-  
+
   {
     path: 'admin/courses',
     component: AdminCourseListComponent,
